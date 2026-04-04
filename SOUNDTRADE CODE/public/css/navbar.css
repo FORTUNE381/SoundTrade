@@ -1,0 +1,52 @@
+:root {
+    --bg-main: #edf7f8;
+    --bg-white: #ffffff;
+    --accent-dark: #1ccad8;
+    --accent: #43b3ae;
+    --text-dark: #0f172f;
+    --text-muted: #667085;
+    --border-light: #dde7ea;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .navbar {
+    height: 80px;
+    background-color: var(--accent);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+  }
+  .nav-logo{
+    height: 80px;
+    width: 160px;
+  }
+  .logo img {
+    height: 80px;
+    width: 100%;
+  }
+  
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .signup-btn {
+    background: white;
+    color: var(--accent) !important;
+    padding: 8px 14px;
+    border-radius: 8px;
+  }

@@ -4,12 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SoundTrade</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <p> Test</p>
+  
   <%- include("partials/navbar") %>
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <p class="hero-tag">
+          <h1>Trade Your Music Skills</h1>
+        </p>
 
-  <h1>It works 🎉</h1>
+        
 
+        <p class="hero-description">
+          Learn guitar, piano, vocals, and more by exchanging the skills you already have with others.
+        </p>
+
+        <form class="search-box">
+          <div class="field-group">
+            <label for="knowSkill">I know</label>
+            <input
+              type="text"
+              id="knowSkill"
+              name="knowSkill"
+              placeholder="e.g. I can play Guitar"
+            >
+          </div>
+
+          <div class="field-group">
+            <label for="learnSkill">I want to learn</label>
+            <input
+              type="text"
+              id="learnSkill"
+              name="learnSkill"
+              placeholder="e.g. I want to learn Piano"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
 </body>
 </html>

@@ -1,8 +1,8 @@
 :root {
   --bg-main: #edf7f8;
   --bg-white: #ffffff;
-  --accent: #2fd3d6;
-  --accent-dark: #25bfc2;
+  --accent-dark: #1CCAD8;
+  --accent: #43b3ae;
   --text-dark: #0f172f;
   --text-muted: #667085;
   --border-light: #dde7ea;
@@ -12,12 +12,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  
 }
+
 
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-main);
-  color: var(--text-dark);
+  color: var(--accent);
 }
 
 .container {
@@ -57,9 +59,7 @@ body {
 }
 
 .search-box {
-  background-color: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: 20px;
+  
   padding: 25px;
   display: flex;
   flex-direction: column;
