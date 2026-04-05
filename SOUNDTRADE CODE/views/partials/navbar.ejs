@@ -23,7 +23,11 @@
   <nav class="nav-links">
     <a href="/">Home</a>
     <a href="/results">Explore</a>
-    <a href="/auth">Login</a>
-    <a href="/auth" class="signup-btn">Sign Up</a>
+<% if (req.isAuthenticated()) { %>
+<% <form action="/logout" method="post"> %>
+<% <button type="submit" value="submit">Log Out</button></form> %>
+<% } else { %>
+<% <a href="/auth">Login</a> %>
+<% <a href="/auth" class="signup-btn">Sign Up</a> %>
   </nav>
 </header>
