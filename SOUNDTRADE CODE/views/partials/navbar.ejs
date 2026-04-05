@@ -26,6 +26,7 @@
 <% if (req.isAuthenticated()) { %>
 <% <form action="/logout" method="post"> %>
 <% <button type="submit" value="submit">Log Out</button></form> %>
+<% <a href="/dashboard">View Account</a> %>
 <% } else { %>
 <% <a href="/auth">Login</a> %>
 <% <a href="/auth" class="signup-btn">Sign Up</a> %>
