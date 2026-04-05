@@ -259,3 +259,148 @@ body {
     height: 320px;
   }
 }
+
+/*------ Result Page------*/
+
+.results-page {
+  padding: 70px 8%;
+  background: var(--bg-main);
+  min-height: 100vh;
+}
+
+.results-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 50px;
+}
+
+.results-header h1 {
+  font-size: 2.8rem;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+}
+
+.results-subtext {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* Cards container */
+.results-grid {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+/* Single card */
+.result-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: 22px;
+  padding: 24px;
+  width: 320px;
+}
+
+.result-card:hover {
+  cursor: pointer;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.card-top h3 {
+  font-size: 1.25rem;
+  color: var(--text-dark);
+}
+
+.level-tag {
+  background: rgba(67, 179, 174, 0.12);
+  color: var(--accent-dark);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 999px;
+}
+
+.result-card p {
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.card-description {
+  color: var(--text-muted) !important;
+  margin: 16px 0 22px;
+}
+
+.trade-btn {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  background: var(--accent);
+  color: white;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.trade-btn:hover {
+  background: var(--accent-dark);
+}
+
+/* No match section */
+.no-match-box {
+  background: #0f172f;
+  color: white;
+  border-radius: 24px;
+  padding: 40px 30px;
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.no-match-box h2 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.no-match-box p {
+  color: #d8dee8;
+  margin-bottom: 22px;
+  line-height: 1.7;
+}
+
+.post-btn {
+  display: inline-block;
+  text-decoration: none;
+  background: white;
+  color: var(--text-dark);
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.post-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .results-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .result-card {
+    width: 100%;
+    max-width: 360px;
+  }
+}

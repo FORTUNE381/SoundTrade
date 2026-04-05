@@ -9,39 +9,38 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  
   <%- include("partials/navbar") %>
+
   <main>
     <section class="hero">
       <div class="container hero-content">
-        <p class="hero-tag">
-          <h1>Trade Your Music Skills</h1>
-        </p>
-
-        
+        <p class="hero-tag">MUSIC SKILL EXCHANGE</p>
+        <h1>Trade Your Music Skills</h1>
 
         <p class="hero-description">
           Learn guitar, piano, vocals, and more by exchanging the skills you already have with others.
         </p>
 
-        <form class="search-box">
+        <form class="search-box" action="/search" method="GET">
           <div class="field-group">
-            <label for="knowSkill">I know</label>
+            <label for="skillOffered">I know</label>
             <input
               type="text"
-              id="knowSkill"
-              name="knowSkill"
-              placeholder="e.g. I can play Guitar"
+              id="skillOffered"
+              name="skillOffered"
+              placeholder="e.g. Guitar"
+              required
             >
           </div>
 
           <div class="field-group">
-            <label for="learnSkill">I want to learn</label>
+            <label for="skillWanted">I want to learn</label>
             <input
               type="text"
-              id="learnSkill"
-              name="learnSkill"
-              placeholder="e.g. I want to learn Piano"
+              id="skillWanted"
+              name="skillWanted"
+              placeholder="e.g. Piano"
+              required
             >
           </div>
 
@@ -54,7 +53,7 @@
       <div class="how-left">
         <p class="section-tag">HOW IT WORKS</p>
         <h2>Start Learning Through Skill Exchange</h2>
-    
+
         <div class="how-step">
           <div class="step-icon">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -64,7 +63,7 @@
             <p>Enter the music skill you already know and the one you want to learn.</p>
           </div>
         </div>
-    
+
         <div class="how-step">
           <div class="step-icon">
             <i class="fa-solid fa-user-group"></i>
@@ -74,7 +73,7 @@
             <p>Browse users with compatible music skill trades in a clean card-based view.</p>
           </div>
         </div>
-    
+
         <div class="how-step">
           <div class="step-icon">
             <i class="fa-solid fa-comments"></i>
@@ -85,13 +84,9 @@
           </div>
         </div>
       </div>
-    
-      
     </section>
-
   </main>
+
   <%- include("partials/footer") %>
-</body>
-</html>
 </body>
 </html>

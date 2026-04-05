@@ -51,7 +51,7 @@
     border-radius: 8px;
   }
   /*------Footer----*/
-  .foot-panel4{
+  .footer{
     background-color:#0f1111;
     color:white;
     height: 80px;
@@ -59,7 +59,7 @@
     font-size: 0.7rem;
 }
 
-.copyright{
+.footer-text{
     
     padding-top: 5px;
 }

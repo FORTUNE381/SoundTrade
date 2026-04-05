@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Results - SoundTrade</title>
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+  <main class="results-page">
+    <section class="results-header">
+      <p class="section-tag">MATCH RESULTS</p>
+      <h1>Your Music Skill Matches</h1>
+
+      <% if (skillOffered && skillWanted) { %>
+        <p class="results-subtext">
+          You can teach <strong><%= skillOffered %></strong> and want to learn
+          <strong><%= skillWanted %></strong>.
+        </p>
+      <% } else { %>
+        <p class="results-subtext">
+          Browse some available music skill exchange matches.
+        </p>
+      <% } %>
+    </section>
+
+    <section class="results-grid">
+      <% matches.forEach(match => { %>
+        <div class="result-card">
+          <div class="card-top">
+            <h3><%= match.username %></h3>
+            
+          </div>
+
+          <p><strong>Teaches:</strong> <%= match.skillOffered %></p>
+          <p><strong>Wants to learn:</strong> <%= match.skillWanted %></p>
+          <p class="card-description"><%= match.description %></p>
+
+          <a href="/auth" class="trade-btn">Trade</a>
+        </div>
+      <% }) %>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
+</body>
+</html>
