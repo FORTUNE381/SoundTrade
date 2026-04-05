@@ -50,3 +50,16 @@
     padding: 8px 14px;
     border-radius: 8px;
   }
+  /*------Footer----*/
+  .foot-panel4{
+    background-color:#0f1111;
+    color:white;
+    height: 80px;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+.copyright{
+    
+    padding-top: 5px;
+}

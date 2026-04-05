@@ -59,7 +59,6 @@ body {
 }
 
 .search-box {
-  
   padding: 25px;
   display: flex;
   flex-direction: column;
@@ -183,4 +182,80 @@ body {
 
 .auth-form .btn-primary {
   margin-top: 8px;
+}
+/*-----How it Works Section(Fairuz)-----*/
+.how-it-works {
+  background: #0b0f19;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 50px;
+  padding: 90px 8%;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.how-left {
+  flex: 1;
+  min-width: 300px;
+}
+
+.section-tag {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.how-left h2 {
+  font-size: 2.8rem;
+  line-height: 1.2;
+  margin-bottom: 35px;
+}
+
+.how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 28px;
+  flex-direction: row;
+}
+
+.step-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: rgba(47, 211, 214, 0.14);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--accent);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.step-text h3 {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+}
+
+.step-text p {
+  color: #c8d0d9;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+@media (max-width: 900px) {
+  .how-it-works {
+    padding: 70px 6%;
+  }
+
+  .how-left h2 {
+    font-size: 2.2rem;
+  }
+
+  .how-visual {
+    height: 320px;
+  }
 }
