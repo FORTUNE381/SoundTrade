@@ -24,8 +24,7 @@
     <a href="/">Home</a>
     <a href="/results">Explore</a>
 <% if (req.isAuthenticated()) { %>
-<% <form action="/logout" method="post"> %>
-<% <button type="submit" value="submit">Log Out</button></form> %>
+<% <a href="/logout">Log Out</a> %>
 <% <a href="/dashboard">View Account</a> %>
 <% } else { %>
 <% <a href="/auth">Login</a> %>
