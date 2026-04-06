@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade Chat | SoundTrade</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <%- include("partials/navbar") %>
+
+  <main class="trade-page">
+    <section class="trade-header">
+      <h1>Skill Trade</h1>
+      <p>Connect, chat, and plan your learning exchange.</p>
+    </section>
+
+    <section class="trade-card">
+      <div class="trade-info">
+        <h2>Trade Details</h2>
+
+        <p>
+          <strong>You:</strong>
+          <%= currentUser ? currentUser.username : "Guest User" %>
+        </p>
+
+        <p>
+          <strong>Trading With:</strong>
+          <%= partner ? partner.username : "Other User" %>
+        </p>
+
+        <p>
+          <strong>You Know:</strong>
+          <%= tradePost ? tradePost.knows : "Not specified" %>
+        </p>
+
+        <p>
+          <strong>You Want to Learn:</strong>
+          <%= tradePost ? tradePost.wants : "Not specified" %>
+        </p>
+      </div>
+
+      <div class="trade-actions">
+        <h2>Trade Status</h2>
+        <p>
+          <strong>Status:</strong>
+          <%= tradePost && tradePost.accepted ? "Accepted" : "Pending" %>
+        </p>
+
+        <form action="/trade/accept" method="POST">
+          <% if (tradePost) { %>
+            <input type="hidden" name="postId" value="<%= tradePost._id %>">
+          <% } %>
+          <button type="submit">Accept Trade</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="chat-section">
+      <h2>Messages</h2>
+
+      <div class="chat-box">
+        <% if (messages && messages.length > 0) { %>
+          <% messages.forEach(message => { %>
+            <div class="chat-message">
+              <p><strong><%= message.sender %>:</strong> <%= message.text %></p>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p>No messages yet. Start the conversation below.</p>
+        <% } %>
+      </div>
+
+      <form action="/trade/message" method="POST" class="chat-form">
+        <% if (tradePost) { %>
+          <input type="hidden" name="postId" value="<%= tradePost._id %>">
+        <% } %>
+
+        <textarea name="message" rows="4" placeholder="Type your message here..." required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+    <section class="trade-note">
+      <h2>Next Step</h2>
+      <p>
+        Use the chat to decide how you will learn from each other, when you will meet,
+        and whether the session will be online or in person.
+      </p>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
+
+</body>
+</html>

@@ -135,12 +135,35 @@ app.get("/dashboard", (req, res) => {
 });
 
 
+//app.get("/trade", (req, res) => {
+  //const trades = readJSON(tradesFilePath);
+
+  //res.render("trade", {
+    //trades
+  //});
+//});
 app.get("/trade", (req, res) => {
-  const trades = readJSON(tradesFilePath);
+
+  // TEMP demo data 
+  const tradePost = {
+    _id: "123",
+    knows: "Java",
+    wants: "Guitar",
+    accepted: false
+  };
+
+  const messages = [
+    { sender: "You", text: "Hey! When can we start?" },
+    { sender: "Other User", text: "Maybe this weekend?" }
+  ];
 
   res.render("trade", {
-    trades
+    currentUser: req.user,
+    partner: { username: "Other User" },
+    tradePost,
+    messages
   });
+
 });
 
 
