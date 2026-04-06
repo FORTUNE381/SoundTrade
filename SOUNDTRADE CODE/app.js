@@ -24,6 +24,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 app.set("view engine", "ejs");
 
@@ -48,7 +52,7 @@ const postSchema = new mongoose.Schema({
   poster: String,
   knows: String,
   wants: String,
-  accepted: boolean
+  accepted: Boolean
 });
 
 const Post = mongoose.model("Post", postSchema);
@@ -170,7 +174,7 @@ app.post("/post-skill", async (req, res) => {
     knows: req.body.knowSkill,
     wants: req.body.learnSkill,
     accepted: false
-      )};
+  });
   await newPost.save();
 
   res.redirect("/dashboard");
