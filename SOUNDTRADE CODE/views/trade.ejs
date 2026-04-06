@@ -3,12 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-  <title>Trade Chat | SoundTrade</title>
-=======
   <title>Trade | SoundTrade</title>
   <link rel="stylesheet" href="/css/navbar.css">
->>>>>>> 27f6489 (Added auth CSS and results page)
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -17,43 +13,17 @@
 
   <main class="trade-page">
     <section class="trade-header">
-<<<<<<< HEAD
-      <h1>Skill Trade</h1>
-      <p>Connect, chat, and plan your learning exchange.</p>
-=======
       <p class="section-tag">SKILL TRADE</p>
       <h1>Plan Your Skill Exchange</h1>
       <p class="results-subtext">
         Connect, chat, and organize how you want to teach and learn together.
       </p>
->>>>>>> 27f6489 (Added auth CSS and results page)
     </section>
 
     <section class="trade-card">
       <div class="trade-info">
         <h2>Trade Details</h2>
 
-<<<<<<< HEAD
-        <p>
-          <strong>You:</strong>
-          <%= currentUser ? currentUser.username : "Guest User" %>
-        </p>
-
-        <p>
-          <strong>Trading With:</strong>
-          <%= partner ? partner.username : "Other User" %>
-        </p>
-
-        <p>
-          <strong>You Know:</strong>
-          <%= tradePost ? tradePost.knows : "Not specified" %>
-        </p>
-
-        <p>
-          <strong>You Want to Learn:</strong>
-          <%= tradePost ? tradePost.wants : "Not specified" %>
-        </p>
-=======
         <div class="trade-detail-list">
           <p>
             <strong>You:</strong>
@@ -75,24 +45,10 @@
             <%= tradePost ? tradePost.wants : "Not specified" %>
           </p>
         </div>
->>>>>>> 27f6489 (Added auth CSS and results page)
       </div>
 
       <div class="trade-actions">
         <h2>Trade Status</h2>
-<<<<<<< HEAD
-        <p>
-          <strong>Status:</strong>
-          <%= tradePost && tradePost.accepted ? "Accepted" : "Pending" %>
-        </p>
-
-        <form action="/trade/accept" method="POST">
-          <% if (tradePost) { %>
-            <input type="hidden" name="postId" value="<%= tradePost._id %>">
-          <% } %>
-          <button type="submit">Accept Trade</button>
-        </form>
-=======
 
         <div class="trade-status-box">
           <p>
@@ -109,7 +65,6 @@
         <% } else { %>
           <button type="button" class="trade-btn disabled-btn" disabled>No Trade Selected</button>
         <% } %>
->>>>>>> 27f6489 (Added auth CSS and results page)
       </div>
     </section>
 
@@ -124,11 +79,7 @@
             </div>
           <% }) %>
         <% } else { %>
-<<<<<<< HEAD
-          <p>No messages yet. Start the conversation below.</p>
-=======
           <p class="empty-chat-text">No messages yet. Start the conversation below.</p>
->>>>>>> 27f6489 (Added auth CSS and results page)
         <% } %>
       </div>
 
@@ -137,10 +88,6 @@
           <input type="hidden" name="postId" value="<%= tradePost._id %>">
         <% } %>
 
-<<<<<<< HEAD
-        <textarea name="message" rows="4" placeholder="Type your message here..." required></textarea>
-        <button type="submit">Send Message</button>
-=======
         <textarea
           name="message"
           rows="4"
@@ -149,7 +96,6 @@
         ></textarea>
 
         <button type="submit" class="trade-btn">Send Message</button>
->>>>>>> 27f6489 (Added auth CSS and results page)
       </form>
     </section>
 
