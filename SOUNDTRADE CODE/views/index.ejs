@@ -4,84 +4,89 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SoundTrade</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/css/navbar.css">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
 </head>
 <body>
   <%- include("partials/navbar") %>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-content">
-        <p class="hero-tag">MUSIC SKILL EXCHANGE</p>
-        <h1>Trade Your Music Skills</h1>
+  <main class="hero-page">
+    <section class="hero-section">
+      <p class="section-tag">MUSIC SKILL EXCHANGE</p>
+      <h1>Trade Your Music Skills</h1>
+      <p class="hero-subtext">
+        Learn guitar, piano, vocals, and more by exchanging the skills you already
+        have with others.
+      </p>
 
-        <p class="hero-description">
-          Learn guitar, piano, vocals, and more by exchanging the skills you already have with others.
-        </p>
-        <br>
-        <p>*You will have to log in or sign up before you begin trading</p>
+      <p class="hero-note">
+        *You will have to log in or sign up before you begin trading
+      </p>
 
-        <form action="/search" method="post">
-          <div class="field-group">
-            <label for="knowSkill">I know...</label>
-            <input
-              type="text"
-              id="knowSkill"
-              name="knowSkill"
-              placeholder="e.g. guitar, flute, saxophone, etc."
-            >
-          </div>
+      <form action="/search" method="POST" class="search-form">
+        <div class="field-group">
+          <label for="knowSkill">I know...</label>
+          <input
+            type="text"
+            id="knowSkill"
+            name="knowSkill"
+            placeholder="Example: Guitar"
+            required
+          >
+        </div>
 
-          <div class="field-group">
-            <label for="learnSkill">I want to learn...</label>
-            <input
-              type="text"
-              id="learnSkill"
-              name="learnSkill"
-              placeholder="e.g. piano, drums, trumpet, etc."
-            >
-          </div>
+        <div class="field-group">
+          <label for="learnSkill">I want to learn...</label>
+          <input
+            type="text"
+            id="learnSkill"
+            name="learnSkill"
+            placeholder="Example: Piano"
+            required
+          >
+        </div>
 
-          <button type="submit" class="btn btn-primary">Find Match</button>
-        </form>
-      </div>
+        <button type="submit" class="btn btn-primary">Find Match</button>
+      </form>
     </section>
 
-    <section class="how-it-works">
-      <div class="how-left">
-        <p class="section-tag">HOW IT WORKS</p>
+    <section class="how-section">
+      <div class="how-container">
+        <p class="how-tag">HOW IT WORKS</p>
         <h2>Start Learning Through Skill Exchange</h2>
 
-        <div class="how-step">
-          <div class="step-icon">
-            <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="how-list">
+          <div class="how-item">
+            <div class="how-icon">⌕</div>
+            <div class="how-text">
+              <h3>Search Skills</h3>
+              <p>
+                Enter the music skill you already know and the one you want to
+                learn.
+              </p>
+            </div>
           </div>
-          <div class="step-text">
-            <h3>Search Skills</h3>
-            <p>Enter the music skill you already know and the one you want to learn.</p>
-          </div>
-        </div>
 
-        <div class="how-step">
-          <div class="step-icon">
-            <i class="fa-solid fa-user-group"></i>
+          <div class="how-item">
+            <div class="how-icon">👥</div>
+            <div class="how-text">
+              <h3>Find a Match</h3>
+              <p>
+                Browse users with compatible music skill trades in a clean
+                card-based view.
+              </p>
+            </div>
           </div>
-          <div class="step-text">
-            <h3>Find a Match</h3>
-            <p>Browse users with compatible music skill trades in a clean card-based view.</p>
-          </div>
-        </div>
 
-        <div class="how-step">
-          <div class="step-icon">
-            <i class="fa-solid fa-comments"></i>
-          </div>
-          <div class="step-text">
-            <h3>Start Trading</h3>
-            <p>Connect through messages and decide how you want to teach and learn together.</p>
+          <div class="how-item">
+            <div class="how-icon">💬</div>
+            <div class="how-text">
+              <h3>Start Trading</h3>
+              <p>
+                Connect through messages and decide how you want to teach and
+                learn together.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -89,6 +94,5 @@
   </main>
 
   <%- include("partials/footer") %>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

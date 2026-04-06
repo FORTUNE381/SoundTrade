@@ -1,89 +1,75 @@
-<%- include("partials/navbar") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth - SoundTrade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
 
-<section class="auth-section">
-  <div class="auth-container">
-    <div class="auth-card">
+  <section class="auth-section">
+    <div class="auth-container">
+      <div class="auth-card">
+        <p class="auth-tag">WELCOME TO SOUNDTRADE</p>
 
-      <p class="auth-tag">WELCOME TO SOUNDTRADE</p>
+        <h1>Login or create an account to start trading music skills.</h1>
 
-      <h1>Login or create an account to start trading music skills.</h1>
+        <p class="auth-description">
+          Browse matches, post your skills, and message other users once you sign in.
+        </p>
 
-      <p class="auth-description">
-        Browse matches, post your skills, and message other users once you sign in.
-      </p>
+        <div class="accordion-wrapper">
+          <details class="accordion-item" open>
+            <summary>Login</summary>
 
-      <div class="accordion-wrapper">
+            <form action="/login" method="POST" class="auth-form">
+              <div class="field-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email" required>
+              </div>
 
-        <details class="accordion-item" open>
-          <summary>Login</summary>
+              <div class="field-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
+              </div>
 
-          <form action="/login" method="POST" class="auth-form">
-            <div class="field-group">
-              <label for="loginEmail">Email</label>
-              <input
-                type="email"
-                id="loginEmail"
-                name="loginEmail"
-                placeholder="Enter your email"
-              >
-            </div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </details>
 
-            <div class="field-group">
-              <label for="loginPassword">Password</label>
-              <input
-                type="password"
-                id="loginPassword"
-                name="loginPassword"
-                placeholder="Enter your password"
-              >
-            </div>
+          <details class="accordion-item">
+            <summary>Sign Up</summary>
 
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
-        </details>
+            <form action="/signup" method="POST" class="auth-form">
+              <div class="field-group">
+                <label for="signupUsername">Username</label>
+                <input type="text" id="signupUsername" name="signupUsername" placeholder="Choose a username">
+              </div>
 
-        <details class="accordion-item">
-          <summary>Sign Up</summary>
+              <div class="field-group">
+                <label for="signupEmail">Email</label>
+                <input type="email" id="signupEmail" name="signupEmail" placeholder="Enter your email" required>
+              </div>
 
-          <form action="/signup" method="POST" class="auth-form">
-            <div class="field-group">
-              <label for="signupUsername">Username</label>
-              <input
-                type="text"
-                id="signupUsername"
-                name="signupUsername"
-                placeholder="Choose a username"
-              >
-            </div>
+              <div class="field-group">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" name="signupPassword" placeholder="Create a password" required>
+              </div>
 
-            <div class="field-group">
-              <label for="signupEmail">Email</label>
-              <input
-                type="email"
-                id="signupEmail"
-                name="signupEmail"
-                placeholder="Enter your email"
-              >
-            </div>
-
-            <div class="field-group">
-              <label for="signupPassword">Password</label>
-              <input
-                type="password"
-                id="signupPassword"
-                name="signupPassword"
-                placeholder="Create a password"
-              >
-            </div>
-
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-          </form>
-        </details>
-
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+          </details>
+        </div>
       </div>
-
     </div>
-  </div>
-</section>
+  </section>
 
-<%- include("layouts/footer") %>
+  <%- include("partials/footer") %>
+</body>
+</html>

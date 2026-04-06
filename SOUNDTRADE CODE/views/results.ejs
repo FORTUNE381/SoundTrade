@@ -28,20 +28,49 @@
     </section>
 
     <section class="results-grid">
-      <% matches.forEach(match => { %>
-        <div class="result-card">
-          <div class="card-top">
-            <h3><%= match.username %></h3>
-            
+      <% if (matches.length > 0) { %>
+        <% matches.forEach(match => { %>
+          <div class="result-card">
+            <div class="card-top">
+              <h3><%= match.username %></h3>
+            </div>
+
+            <p><strong>Teaches:</strong> <%= match.skillOffered %></p>
+            <p><strong>Wants to learn:</strong> <%= match.skillWanted %></p>
+            <p class="card-description"><%= match.description %></p>
+
+            <% if (currentUser) { %>
+              <a href="/trade" class="trade-btn">Trade</a>
+            <% } else { %>
+              <a href="/auth" class="trade-btn">Login to Trade</a>
+            <% } %>
           </div>
+        <% }) %>
+      <% } else { %>
+        <div class="no-match-box">
+          <h3>No matches found</h3>
 
-          <p><strong>Teaches:</strong> <%= match.skillOffered %></p>
-          <p><strong>Wants to learn:</strong> <%= match.skillWanted %></p>
-          <p class="card-description"><%= match.description %></p>
+          <% if (skillOffered && skillWanted) { %>
+            <p>
+              No one is offering <strong><%= skillWanted %></strong> for
+              <strong><%= skillOffered %></strong> yet.
+            </p>
+          <% } else { %>
+            <p>No matches available yet.</p>
+          <% } %>
 
-          <a href="/auth" class="trade-btn">Trade</a>
+          <% if (currentUser) { %>
+            <a
+              href="/post-skill?knowSkill=<%= encodeURIComponent(skillOffered) %>&learnSkill=<%= encodeURIComponent(skillWanted) %>"
+              class="trade-btn"
+            >
+              Post Skill
+            </a>
+          <% } else { %>
+            <a href="/auth" class="trade-btn">Login to Post Skill</a>
+          <% } %>
         </div>
-      <% }) %>
+      <% } %>
     </section>
   </main>
 

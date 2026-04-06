@@ -1,50 +1,43 @@
-const fs = require("fs");
 const express = require("express");
-const mongoose = require('mongoose');
-const { runInNewContext } = require("vm");
-
-const session = require("express-session")
-const passport = require("passport")
-const passportLocalMongoose = require("passport-local-mongoose").default
+const mongoose = require("mongoose");
+const session = require("express-session");
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose").default;
 require("dotenv").config();
 
 const app = express();
-
 const port = 3000;
 
 app.use(express.urlencoded({ extended: true }));
-
 app.use(express.static("public"));
 
-app.use(session({
-    secret: process.env.SECRET,
+app.use(
+  session({
+    secret: process.env.SECRET || "soundtrade-secret",
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.currentUser = req.user || null;
   next();
 });
 
 app.set("view engine", "ejs");
 
-mongoose.connect('mongodb://localhost:27017/test');
-
-
 const userSchema = new mongoose.Schema({
-    username: String,
-    password: String
+  username: String,
+  password: String,
 });
 
 userSchema.plugin(passportLocalMongoose);
-
 const User = mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -52,57 +45,71 @@ const postSchema = new mongoose.Schema({
   poster: String,
   knows: String,
   wants: String,
-  accepted: Boolean
+  accepted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Post = mongoose.model("Post", postSchema);
-
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
 
 app.get("/", (req, res) => {
   res.render("index");
 });
 
-
 app.get("/auth", (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
   res.render("auth");
 });
 
-
-app.post("/login", async (req, res) => {
-    console.log(req.body);
-
-    console.log("User " + req.body.username + " is attempting to log in");
-    const user = new User({
-        username: req.body.username,
-        password: req.body.password
-    });
-    req.login(user, (err) => {
-        if (err) {
-            console.log(err);
-            res.redirect("/");
-        } else {
-            passport.authenticate("local")(req, res, () => {
-                res.render("index");
-            });
-        }
-    });
+app.get("/login", (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
+  res.redirect("/auth");
 });
 
+app.get("/signup", (req, res) => {
+  if (req.user) {
+    return res.redirect("/");
+  }
+  res.redirect("/auth");
+});
+
+app.post("/login", (req, res, next) => {
+  const email = (req.body.loginEmail || "").trim();
+  const password = req.body.loginPassword || "";
+
+  if (!email || !password) {
+    return res.redirect("/auth");
+  }
+
+  const user = new User({
+    username: email,
+    password: password,
+  });
+
+  req.login(user, (err) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/auth");
+    }
+
+    passport.authenticate("local", {
+      successRedirect: "/",
+      failureRedirect: "/auth",
+    })(req, res, next);
+  });
+});
 
 app.post("/signup", async (req, res) => {
-    console.log(req.body);
-        console.log("User " + req.body.Username + " is attempting to register");
-        const user = new User({ username: req.body.Username });
-        await User.register(user, req.body.pass);
-        passport.authenticate("local")(req, res, () => {
-            res.render("index");
-        })
-});
+  try {
+    const email = (req.body.signupEmail || "").trim();
+    const password = req.body.signupPassword || "";
 
+<<<<<<< HEAD
 
 app.get('/logout', function (req, res, next) {
     req.logout(function (err) {
@@ -179,30 +186,248 @@ wantToLearn = req.body.learnSkill.toLowerCase();
     if (posts[i].knows === wantToLearn && posts[i].wants === iKnow){
       matches = true;
       break;
+=======
+    if (!email || !password) {
+      return res.redirect("/auth");
+>>>>>>> 27f6489 (Added auth CSS and results page)
     }
-  }
-  if (matches == true) {
-    res.render("results");
-  }
-  if (matches == false) {
-    res.render("no-match")
+
+    const existingUser = await User.findOne({ username: email });
+    if (existingUser) {
+      return res.redirect("/auth");
+    }
+
+    const newUser = new User({ username: email });
+    const registeredUser = await User.register(newUser, password);
+
+    req.login(registeredUser, (err) => {
+      if (err) {
+        console.log(err);
+        return res.redirect("/auth");
+      }
+      res.redirect("/");
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/auth");
   }
 });
 
+app.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.get("/results", async (req, res) => {
+  try {
+    const posts = await Post.find();
+
+    const matches = posts.map((post) => ({
+      username: post.poster,
+      skillOffered: post.knows,
+      skillWanted: post.wants,
+      description: "Music skill exchange match",
+    }));
+
+    res.render("results", {
+      matches,
+      skillOffered: "",
+      skillWanted: "",
+      currentUser: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("results", {
+      matches: [],
+      skillOffered: "",
+      skillWanted: "",
+      currentUser: req.user,
+    });
+  }
+});
+
+app.post("/search", async (req, res) => {
+  try {
+    const knowSkill = (req.body.knowSkill || "").trim();
+    const learnSkill = (req.body.learnSkill || "").trim();
+
+    if (!knowSkill || !learnSkill) {
+      return res.render("results", {
+        matches: [],
+        skillOffered: knowSkill,
+        skillWanted: learnSkill,
+        currentUser: req.user,
+      });
+    }
+
+    const iKnow = knowSkill.toLowerCase();
+    const wantToLearn = learnSkill.toLowerCase();
+
+    const posts = await Post.find();
+
+    const matches = posts
+      .filter(
+        (post) =>
+          post.knows &&
+          post.wants &&
+          post.knows.toLowerCase() === wantToLearn &&
+          post.wants.toLowerCase() === iKnow
+      )
+      .map((post) => ({
+        username: post.poster,
+        skillOffered: post.knows,
+        skillWanted: post.wants,
+        description: "Music skill exchange match",
+      }));
+
+    res.render("results", {
+      matches,
+      skillOffered: knowSkill,
+      skillWanted: learnSkill,
+      currentUser: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("results", {
+      matches: [],
+      skillOffered: "",
+      skillWanted: "",
+      currentUser: req.user,
+    });
+  }
+});
+
+app.get("/post-skill", (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
+
+  const knowSkill = (req.query.knowSkill || "").trim();
+  const learnSkill = (req.query.learnSkill || "").trim();
+
+  res.render("post-skill", {
+    knowSkill,
+    learnSkill,
+    currentUser: req.user,
+  });
+});
 
 app.post("/post-skill", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
 
-  const newPost = new Post({
-    poster: req.user.username,
-    knows: req.body.knowSkill,
-    wants: req.body.learnSkill,
-    accepted: false
-  });
-  await newPost.save();
+  try {
+    const knowSkill = (req.body.knowSkill || "").trim();
+    const learnSkill = (req.body.learnSkill || "").trim();
 
-  res.redirect("/dashboard");
+    if (!knowSkill || !learnSkill) {
+      return res.redirect("/post-skill");
+    }
+
+    const newPost = new Post({
+      poster: req.user.username,
+      knows: knowSkill,
+      wants: learnSkill,
+    });
+
+    await newPost.save();
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/post-skill");
+  }
 });
 
+app.get("/dashboard", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
+
+  try {
+    const posts = await Post.find({ poster: req.user.username });
+
+    res.render("dashboard", {
+      posts,
+      trades: [],
+      currentUser: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("dashboard", {
+      posts: [],
+      trades: [],
+      currentUser: req.user,
+    });
+  }
+});
+
+app.get("/trade", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
+
+  try {
+    const tradePostId = req.query.postId || "";
+    let tradePost = null;
+    let partner = null;
+
+    if (tradePostId) {
+      tradePost = await Post.findById(tradePostId);
+      if (tradePost) {
+        partner = { username: tradePost.poster };
+      }
+    }
+
+    res.render("trade", {
+      currentUser: req.user,
+      tradePost,
+      partner,
+      messages: [],
+    });
+  } catch (error) {
+    console.log(error);
+    res.render("trade", {
+      currentUser: req.user,
+      tradePost: null,
+      partner: null,
+      messages: [],
+    });
+  }
+});
+
+app.post("/trade/accept", async (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
+
+  try {
+    const postId = req.body.postId || "";
+
+    if (postId) {
+      await Post.findByIdAndUpdate(postId, { accepted: true });
+      return res.redirect(`/trade?postId=${postId}`);
+    }
+
+    res.redirect("/trade");
+  } catch (error) {
+    console.log(error);
+    res.redirect("/trade");
+  }
+});
+
+app.post("/trade/message", (req, res) => {
+  if (!req.user) {
+    return res.redirect("/auth");
+  }
+
+  const postId = req.body.postId || "";
+  res.redirect(postId ? `/trade?postId=${postId}` : "/trade");
+});
 
 app.get("/messages", (req, res) => {
   res.redirect("/trade");
@@ -216,3 +441,12 @@ app.use((req, res) => {
   res.status(404).send("404 - Page not found");
 });
 
+mongoose
+  .connect("mongodb://127.0.0.1:27017/soundtrade")
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  })
+  .catch((err) => console.log(err));

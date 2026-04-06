@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Skill - SoundTrade</title>
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
+
+  <main class="auth-page">
+    <section class="auth-section">
+      <div class="auth-container">
+        <div class="auth-card">
+          <p class="auth-tag">POST A SKILL</p>
+          <h1>Create your music skill trade post</h1>
+          <p class="auth-description">
+            Add the skill you can teach and the skill you want to learn.
+          </p>
+
+          <form action="/post-skill" method="POST" class="auth-form">
+            <div class="field-group">
+              <label for="knowSkill">Skill You Can Teach</label>
+              <input
+                type="text"
+                id="knowSkill"
+                name="knowSkill"
+                placeholder="Example: Guitar"
+                value="<%= knowSkill || '' %>"
+                required
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="learnSkill">Skill You Want to Learn</label>
+              <input
+                type="text"
+                id="learnSkill"
+                name="learnSkill"
+                placeholder="Example: Piano"
+                value="<%= learnSkill || '' %>"
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Post Skill</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
+</body>
+</html>
