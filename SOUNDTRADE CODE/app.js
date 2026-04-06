@@ -1,36 +1,114 @@
-const express = require("express");
-const path = require("path");
 const fs = require("fs");
+const express = require("express");
+const mongoose = require('mongoose');
+const { runInNewContext } = require("vm");
+
+const session = require("express-session")
+const passport = require("passport")
+const passportLocalMongoose = require("passport-local-mongoose").default
+require("dotenv").config();
 
 const app = express();
-const PORT = 3000;
+
+const port = 3000;
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.static("public"));
+
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 
-const usersFilePath = path.join(__dirname, "data", "users.json");
-const postsFilePath = path.join(__dirname, "data", "posts.json");
-const tradesFilePath = path.join(__dirname, "data", "trades.json");
+mongoose.connect('mongodb://localhost:27017/test');
 
-function readJSON(filePath) {
-  const data = fs.readFileSync(filePath, "utf8");
-  return JSON.parse(data);
-}
 
-function writeJSON(filePath, data) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
+const userSchema = new mongoose.Schema({
+    username: String,
+    password: String
+});
+
+userSchema.plugin(passportLocalMongoose);
+
+const User = mongoose.model("User", userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+const postSchema = new mongoose.Schema({
+  poster: String,
+  knows: String,
+  wants: String,
+  accepted: boolean
+});
+
+const Post = mongoose.model("Post", postSchema);
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
+
 
 app.get("/", (req, res) => {
   res.render("index");
 });
 
+
 app.get("/auth", (req, res) => {
   res.render("auth");
 });
+
+
+app.post("/login", async (req, res) => {
+    console.log(req.body);
+
+    console.log("User " + req.body.username + " is attempting to log in");
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password
+    });
+    req.login(user, (err) => {
+        if (err) {
+            console.log(err);
+            res.redirect("/");
+        } else {
+            passport.authenticate("local")(req, res, () => {
+                res.render("index");
+            });
+        }
+    });
+});
+
+
+app.post("/signup", async (req, res) => {
+    console.log(req.body);
+        console.log("User " + req.body.Username + " is attempting to register");
+        const user = new User({ username: req.body.Username });
+        await User.register(user, req.body.pass);
+        passport.authenticate("local")(req, res, () => {
+            res.render("index");
+        })
+});
+
+
+app.get('/logout', function (req, res, next) {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('/');
+    });
+});
+
 
 app.get("/results", (req, res) => {
   const matches = readJSON(postsFilePath);
@@ -41,13 +119,6 @@ app.get("/results", (req, res) => {
   });
 });
 
-app.get("/no-match", (req, res) => {
-  res.render("no-match");
-});
-
-app.get("/post-skill", (req, res) => {
-  res.render("post-skill");
-});
 
 app.get("/dashboard", (req, res) => {
   const posts = readJSON(postsFilePath);
@@ -59,6 +130,7 @@ app.get("/dashboard", (req, res) => {
   });
 });
 
+
 app.get("/trade", (req, res) => {
   const trades = readJSON(tradesFilePath);
 
@@ -67,96 +139,43 @@ app.get("/trade", (req, res) => {
   });
 });
 
-app.get("/search", (req, res) => {
-  const skillOffered = req.query.skillOffered?.trim().toLowerCase();
-  const skillWanted = req.query.skillWanted?.trim().toLowerCase();
 
-  if (!skillOffered || !skillWanted) {
-    return res.redirect("/");
+app.get("/search", async (req, res) => {
+ const posts = await Post.find();
+
+let matches = false;
+  
+iKnow = req.body.knowSkill.toLowerCase();
+wantToLearn = req.body.learnSkill.toLowerCase();
+  
+  for (let i = 0; 0 < posts.length(); i++) {
+    if (posts[i].knows === wantToLearn && posts[i].wants === iKnow){
+      matches = true;
+      break;
+    }
   }
-
-  const posts = readJSON(postsFilePath);
-
-  const matches = posts.filter((post) => {
-    return (
-      post.skillOffered.toLowerCase() === skillWanted &&
-      post.skillWanted.toLowerCase() === skillOffered
-    );
-  });
-
-  if (matches.length === 0) {
-    return res.redirect("/no-match");
+  if (matches == true) {
+    res.render("results");
   }
-
-  res.render("results", {
-    matches,
-    skillOffered: req.query.skillOffered,
-    skillWanted: req.query.skillWanted
-  });
+  if (matches == false) {
+    res.render("no-match")
+  }
 });
 
-app.post("/signup", (req, res) => {
-  const { signupUsername, signupEmail, signupPassword } = req.body;
 
-  const users = readJSON(usersFilePath);
+app.post("/post-skill", async (req, res) => {
 
-  const existingUser = users.find(
-    (user) => user.email.toLowerCase() === signupEmail.trim().toLowerCase()
-  );
-
-  if (existingUser) {
-    return res.send("A user with that email already exists.");
-  }
-
-  const newUser = {
-    id: users.length + 1,
-    username: signupUsername.trim(),
-    email: signupEmail.trim(),
-    password: signupPassword.trim()
-  };
-
-  users.push(newUser);
-  writeJSON(usersFilePath, users);
+  const newPost = new Post({
+    poster: req.user.username,
+    knows: req.body.knowSkill,
+    wants: req.body.learnSkill,
+    accepted: false
+      )};
+  await newPost.save();
 
   res.redirect("/dashboard");
 });
 
-app.post("/login", (req, res) => {
-  const { loginEmail, loginPassword } = req.body;
-
-  const users = readJSON(usersFilePath);
-
-  const foundUser = users.find(
-    (user) =>
-      user.email.toLowerCase() === loginEmail.trim().toLowerCase() &&
-      user.password === loginPassword.trim()
-  );
-
-  if (!foundUser) {
-    return res.send("Invalid email or password.");
-  }
-
-  res.redirect("/dashboard");
-});
-
-app.post("/post-skill", (req, res) => {
-  const { username, skillOffered, skillWanted, description } = req.body;
-
-  const posts = readJSON(postsFilePath);
-
-  const newPost = {
-    id: posts.length + 1,
-    username: username.trim(),
-    skillOffered: skillOffered.trim(),
-    skillWanted: skillWanted.trim(),
-    description: description.trim()
-  };
-
-  posts.push(newPost);
-  writeJSON(postsFilePath, posts);
-
-  res.redirect("/dashboard");
-});
 
 app.get("/messages", (req, res) => {
   res.redirect("/trade");
@@ -170,6 +189,3 @@ app.use((req, res) => {
   res.status(404).send("404 - Page not found");
 });
 
-app.listen(PORT, () => {
-  console.log(`SoundTrade server running at http://localhost:${PORT}`);
-});

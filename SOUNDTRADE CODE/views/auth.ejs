@@ -1,0 +1,89 @@
+<%- include("partials/navbar") %>
+
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+
+      <p class="auth-tag">WELCOME TO SOUNDTRADE</p>
+
+      <h1>Login or create an account to start trading music skills.</h1>
+
+      <p class="auth-description">
+        Browse matches, post your skills, and message other users once you sign in.
+      </p>
+
+      <div class="accordion-wrapper">
+
+        <details class="accordion-item" open>
+          <summary>Login</summary>
+
+          <form action="/login" method="POST" class="auth-form">
+            <div class="field-group">
+              <label for="loginEmail">Email</label>
+              <input
+                type="email"
+                id="loginEmail"
+                name="loginEmail"
+                placeholder="Enter your email"
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="loginPassword">Password</label>
+              <input
+                type="password"
+                id="loginPassword"
+                name="loginPassword"
+                placeholder="Enter your password"
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </details>
+
+        <details class="accordion-item">
+          <summary>Sign Up</summary>
+
+          <form action="/signup" method="POST" class="auth-form">
+            <div class="field-group">
+              <label for="signupUsername">Username</label>
+              <input
+                type="text"
+                id="signupUsername"
+                name="signupUsername"
+                placeholder="Choose a username"
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="signupEmail">Email</label>
+              <input
+                type="email"
+                id="signupEmail"
+                name="signupEmail"
+                placeholder="Enter your email"
+              >
+            </div>
+
+            <div class="field-group">
+              <label for="signupPassword">Password</label>
+              <input
+                type="password"
+                id="signupPassword"
+                name="signupPassword"
+                placeholder="Create a password"
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </form>
+        </details>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%- include("layouts/footer") %>
