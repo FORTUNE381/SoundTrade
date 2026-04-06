@@ -53,6 +53,18 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model("Post", postSchema);
 
+const messageSchema = new mongoose.Schema({
+  postId: String,
+  sender: String,
+  text: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Message = mongoose.model("Message", messageSchema);
+
 app.get("/", (req, res) => {
   res.render("index");
 });
@@ -109,87 +121,8 @@ app.post("/signup", async (req, res) => {
     const email = (req.body.signupEmail || "").trim();
     const password = req.body.signupPassword || "";
 
-<<<<<<< HEAD
-
-app.get('/logout', function (req, res, next) {
-    req.logout(function (err) {
-        if (err) {
-            return next(err);
-        }
-        res.redirect('/');
-    });
-});
-
-
-app.get("/results", (req, res) => {
-  const matches = readJSON(postsFilePath);
-  res.render("results", {
-    matches,
-    skillOffered: "",
-    skillWanted: ""
-  });
-});
-
-
-app.get("/dashboard", (req, res) => {
-  const posts = readJSON(postsFilePath);
-  const trades = readJSON(tradesFilePath);
-
-  res.render("dashboard", {
-    posts,
-    trades
-  });
-});
-
-
-//app.get("/trade", (req, res) => {
-  //const trades = readJSON(tradesFilePath);
-
-  //res.render("trade", {
-    //trades
-  //});
-//});
-app.get("/trade", (req, res) => {
-
-  // TEMP demo data 
-  const tradePost = {
-    _id: "123",
-    knows: "Java",
-    wants: "Guitar",
-    accepted: false
-  };
-
-  const messages = [
-    { sender: "You", text: "Hey! When can we start?" },
-    { sender: "Other User", text: "Maybe this weekend?" }
-  ];
-
-  res.render("trade", {
-    currentUser: req.user,
-    partner: { username: "Other User" },
-    tradePost,
-    messages
-  });
-
-});
-
-
-app.get("/search", async (req, res) => {
- const posts = await Post.find();
-
-let matches = false;
-  
-iKnow = req.body.knowSkill.toLowerCase();
-wantToLearn = req.body.learnSkill.toLowerCase();
-  
-  for (let i = 0; 0 < posts.length(); i++) {
-    if (posts[i].knows === wantToLearn && posts[i].wants === iKnow){
-      matches = true;
-      break;
-=======
     if (!email || !password) {
       return res.redirect("/auth");
->>>>>>> 27f6489 (Added auth CSS and results page)
     }
 
     const existingUser = await User.findOne({ username: email });
@@ -227,6 +160,7 @@ app.get("/results", async (req, res) => {
     const posts = await Post.find();
 
     const matches = posts.map((post) => ({
+      postId: post._id,
       username: post.poster,
       skillOffered: post.knows,
       skillWanted: post.wants,
@@ -278,6 +212,7 @@ app.post("/search", async (req, res) => {
           post.wants.toLowerCase() === iKnow
       )
       .map((post) => ({
+        postId: post._id,
         username: post.poster,
         skillOffered: post.knows,
         skillWanted: post.wants,
@@ -375,11 +310,14 @@ app.get("/trade", async (req, res) => {
     const tradePostId = req.query.postId || "";
     let tradePost = null;
     let partner = null;
+    let messages = [];
 
     if (tradePostId) {
       tradePost = await Post.findById(tradePostId);
+
       if (tradePost) {
         partner = { username: tradePost.poster };
+        messages = await Message.find({ postId: tradePostId }).sort({ createdAt: 1 });
       }
     }
 
@@ -387,7 +325,7 @@ app.get("/trade", async (req, res) => {
       currentUser: req.user,
       tradePost,
       partner,
-      messages: [],
+      messages,
     });
   } catch (error) {
     console.log(error);
@@ -420,13 +358,32 @@ app.post("/trade/accept", async (req, res) => {
   }
 });
 
-app.post("/trade/message", (req, res) => {
+app.post("/trade/message", async (req, res) => {
   if (!req.user) {
     return res.redirect("/auth");
   }
 
-  const postId = req.body.postId || "";
-  res.redirect(postId ? `/trade?postId=${postId}` : "/trade");
+  try {
+    const postId = req.body.postId || "";
+    const text = (req.body.message || "").trim();
+
+    if (!postId || !text) {
+      return res.redirect("/trade");
+    }
+
+    const newMessage = new Message({
+      postId,
+      sender: req.user.username,
+      text,
+    });
+
+    await newMessage.save();
+
+    res.redirect(`/trade?postId=${postId}`);
+  } catch (error) {
+    console.log(error);
+    res.redirect("/trade");
+  }
 });
 
 app.get("/messages", (req, res) => {
