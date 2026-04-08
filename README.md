@@ -63,6 +63,9 @@ git clone https://github.com/FORTUNE381/SoundTrade.git
 ```
 2. Navigate to the project folder:
 ```bash
+cd "SOUNDTRADE PROJECT(NEW PROJECT DETAILS)"
+```
+```bash
 cd "SOUNDTRADE CODE"
 ```
 3. Install dependencies:  
