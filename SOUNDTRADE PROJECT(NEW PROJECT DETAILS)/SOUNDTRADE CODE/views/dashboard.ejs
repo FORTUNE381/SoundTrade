@@ -1,18 +1,94 @@
-.dashboard-content {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | SoundTrade</title>
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include("partials/navbar") %>
 
-.dashboard-panel {
-  background-color: transparent;
-}
+  <main class="dashboard-page">
+    <section class="results-header">
+      <p class="section-tag">MY ACCOUNT</p>
+      <h1>Your Dashboard</h1>
+      <p class="results-subtext">
+        View your posted music skill exchanges and manage your account activity.
+      </p>
 
-.dashboard-panel h2 {
-  color: var(--navy);
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
+      <div class="dashboard-top-action">
+        <a href="/post-skill" class="trade-btn">Post a New Skill</a>
+      </div>
+    </section>
+
+    <section class="dashboard-content">
+      <div class="dashboard-panel">
+        <h2>Your Posted Skills</h2>
+
+        <% if (posts && posts.length > 0) { %>
+          <div class="results-grid">
+            <% posts.forEach(post => { %>
+              <div class="result-card">
+                <div class="card-top">
+                  <h3><%= post.poster %></h3>
+                </div>
+
+                <p><strong>Teaches:</strong> <%= post.knows %></p>
+                <p><strong>Wants to learn:</strong> <%= post.wants %></p>
+                <p class="card-description">
+                  This is one of your active music skill exchange posts.
+                </p>
+
+                <p>
+                  <strong>Status:</strong>
+                  <%= post.accepted ? "Accepted" : "Pending" %>
+                </p>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="no-match-box">
+            <h3>No posts yet</h3>
+            <p>You have not posted any skill exchanges yet.</p>
+            <a href="/post-skill" class="trade-btn">Post Your First Skill</a>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="dashboard-panel">
+        <h2>Your Trades</h2>
+
+        <% if (trades && trades.length > 0) { %>
+          <div class="results-grid">
+            <% trades.forEach(trade => { %>
+              <div class="result-card">
+                <div class="card-top">
+                  <h3><%= trade.partner || "Trade Partner" %></h3>
+                </div>
+
+                <p><strong>Skill Offered:</strong> <%= trade.skillOffered || "Not specified" %></p>
+                <p><strong>Skill Wanted:</strong> <%= trade.skillWanted || "Not specified" %></p>
+                <p class="card-description">
+                  Continue your conversation and plan your next session.
+                </p>
+
+                <a href="/trade" class="trade-btn">Open Trade</a>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <div class="no-match-box">
+            <h3>No trades yet</h3>
+            <p>You have not started any trades yet.</p>
+            <a href="/results" class="trade-btn">Explore Matches</a>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include("partials/footer") %>
+</body>
+</html>
